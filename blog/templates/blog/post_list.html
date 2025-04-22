@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Blog Posts{% endblock title %}
+
+{% block content %}
+
+    <p>Welcome to the Blog!</p>
+
+  
+    <hr>
+    <h2>Create New Post</h2>
+    <form method="POST" action="{% url 'post_list' %}"> 
+        {% csrf_token %} 
+        {{ form.as_p }}
+
+        <button type="submit">Create Post</button>
+    </form>
+    <hr>
+  
+
+
+    <h2>Existing Blog Posts</h2>
+    {% for post in posts %}
+        <article>
+            <h3><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
+           
+            <p>By {{ post.author.username }} on {{ post.published_at|date:"F j, Y P" }}</p>
+            <p>{{ post.content|truncatewords:30|linebreaks }}</p> 
+
+        </article>
+        <hr>
+    {% empty %}
+        <p>No blog posts have been published yet.</p>
+    {% endfor %}
+{% endblock content %}
